@@ -1,3 +1,4 @@
+import 'package:e_comm_new/core/di/service_locator.dart';
 import 'package:e_comm_new/core/error/failure.dart';
 import 'package:e_comm_new/features/auth/data/data_sources/local/auth_local_data_source.dart';
 import 'package:e_comm_new/features/auth/data/data_sources/local/auth_shared_pref_local_data_source.dart';
@@ -8,14 +9,12 @@ import 'package:e_comm_new/features/auth/data/models/register_request.dart';
 import 'package:e_comm_new/features/auth/data/repositry/auth_repository.dart';
 import 'package:e_comm_new/features/auth/presentation/cubit/auth_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
+@singleton
 class AuthCubit extends Cubit<AuthStates> {
-  late final AuthRepository authRepository;
-  AuthCubit() : super(AuthInitial()) {
-    authRepository = AuthRepository(
-        authRemoteDataSource: AuthApiRemoteDataSource(),
-        authLocalDataSource: AuthSharedPrefLocalDataSource());
-  }
+  final AuthRepository authRepository;
+  AuthCubit(this.authRepository) : super(AuthInitial());
   Future<void> register(RegisterRequest registerRequest) async {
     emit(RegisterLoading());
 

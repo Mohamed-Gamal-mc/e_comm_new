@@ -11,7 +11,9 @@ import 'package:e_comm_new/features/auth/data/models/login_response_model.dart'
     hide User;
 import 'package:e_comm_new/features/auth/data/models/register_request.dart';
 import 'package:e_comm_new/features/auth/data/models/register_response_model.dart';
+import 'package:injectable/injectable.dart';
 
+@singleton
 class AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
   final AuthLocalDataSource authLocalDataSource;
