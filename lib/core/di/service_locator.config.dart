@@ -9,6 +9,8 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:dio/dio.dart' as _i361;
+import 'package:e_comm_new/core/di/register_module.dart' as _i589;
 import 'package:e_comm_new/features/auth/data/data_sources/local/auth_local_data_source.dart'
     as _i232;
 import 'package:e_comm_new/features/auth/data/data_sources/local/auth_shared_pref_local_data_source.dart'
@@ -23,22 +25,29 @@ import 'package:e_comm_new/features/auth/presentation/cubit/auth_cubit.dart'
     as _i247;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i526.GetItHelper(
       this,
       environment,
       environmentFilter,
     );
-    gh.singleton<_i962.AuthRemoteDataSource>(
-        () => _i395.AuthApiRemoteDataSource());
+    final registerModule = _$RegisterModule();
+    await gh.factoryAsync<_i460.SharedPreferences>(
+      () => registerModule.getSharedPref,
+      preResolve: true,
+    );
+    gh.singleton<_i361.Dio>(() => registerModule.dio());
     gh.singleton<_i232.AuthLocalDataSource>(
         () => _i612.AuthSharedPrefLocalDataSource());
+    gh.singleton<_i962.AuthRemoteDataSource>(
+        () => _i395.AuthApiRemoteDataSource(gh<_i361.Dio>()));
     gh.singleton<_i3.AuthRepository>(() => _i3.AuthRepository(
           authRemoteDataSource: gh<_i962.AuthRemoteDataSource>(),
           authLocalDataSource: gh<_i232.AuthLocalDataSource>(),
@@ -48,3 +57,5 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$RegisterModule extends _i589.RegisterModule {}

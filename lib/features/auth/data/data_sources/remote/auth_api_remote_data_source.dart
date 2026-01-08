@@ -10,12 +10,8 @@ import 'package:injectable/injectable.dart';
 
 @Singleton(as: AuthRemoteDataSource)
 class AuthApiRemoteDataSource extends AuthRemoteDataSource {
-  final Dio dio = Dio(
-    BaseOptions(
-      baseUrl: ApiConstans.baseUrl,
-      receiveDataWhenStatusError: true,
-    ),
-  );
+  final Dio dio;
+  AuthApiRemoteDataSource(this.dio);
 
   @override
   Future<RegisterResponseModel> register(
