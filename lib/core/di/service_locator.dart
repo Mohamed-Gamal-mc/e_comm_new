@@ -6,4 +6,4 @@ import 'package:injectable/injectable.dart' show InjectableInit;
 final serviceLocator = GetIt.instance;
 
 @InjectableInit()
-void configureDependencies() => serviceLocator.init();
+Future<void> configureDependencies() => serviceLocator.init();
