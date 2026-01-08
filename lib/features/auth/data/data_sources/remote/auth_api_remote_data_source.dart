@@ -6,7 +6,9 @@ import 'package:e_comm_new/features/auth/data/models/login_request.dart';
 import 'package:e_comm_new/features/auth/data/models/login_response_model.dart';
 import 'package:e_comm_new/features/auth/data/models/register_request.dart';
 import 'package:e_comm_new/features/auth/data/models/register_response_model.dart';
+import 'package:injectable/injectable.dart';
 
+@Singleton(as: AuthRemoteDataSource)
 class AuthApiRemoteDataSource extends AuthRemoteDataSource {
   final Dio dio = Dio(
     BaseOptions(
