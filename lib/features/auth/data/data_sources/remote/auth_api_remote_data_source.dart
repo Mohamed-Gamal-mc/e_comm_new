@@ -10,14 +10,14 @@ import 'package:injectable/injectable.dart';
 
 @Singleton(as: AuthRemoteDataSource)
 class AuthApiRemoteDataSource extends AuthRemoteDataSource {
-  final Dio dio;
-  AuthApiRemoteDataSource(this.dio);
+  final Dio _dio;
+  AuthApiRemoteDataSource(this._dio);
 
   @override
   Future<RegisterResponseModel> register(
       RegisterRequest registerRequest) async {
     try {
-      final response = await dio.post(
+      final response = await _dio.post(
         ApiConstans.registerEndPoint,
         data: registerRequest.toJson(),
       );
@@ -35,7 +35,7 @@ class AuthApiRemoteDataSource extends AuthRemoteDataSource {
   @override
   Future<LoginResponseModel> login(LoginRequest logInRequest) async {
     try {
-      final response = await dio.post(ApiConstans.logInEndPoint,
+      final response = await _dio.post(ApiConstans.logInEndPoint,
           data: logInRequest.toJson());
       return LoginResponseModel.fromJson(response.data);
     } catch (exception) {

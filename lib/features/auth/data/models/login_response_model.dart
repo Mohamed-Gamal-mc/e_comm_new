@@ -1,5 +1,4 @@
 import 'package:e_comm_new/features/auth/data/models/user_model.dart';
-import 'package:flutter/foundation.dart';
 
 class LoginResponseModel {
   String message;

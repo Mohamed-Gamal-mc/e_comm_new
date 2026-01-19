@@ -19,8 +19,13 @@ import 'package:e_comm_new/features/auth/data/data_sources/remote/auth_api_remot
     as _i395;
 import 'package:e_comm_new/features/auth/data/data_sources/remote/auth_remote_data_source.dart'
     as _i962;
-import 'package:e_comm_new/features/auth/data/repositry/auth_repository.dart'
-    as _i3;
+import 'package:e_comm_new/features/auth/data/repositry/auth_repository_imp.dart'
+    as _i984;
+import 'package:e_comm_new/features/auth/domain/repositroies/auth_repository.dart'
+    as _i679;
+import 'package:e_comm_new/features/auth/domain/use_cases/login.dart' as _i345;
+import 'package:e_comm_new/features/auth/domain/use_cases/register.dart'
+    as _i104;
 import 'package:e_comm_new/features/auth/presentation/cubit/auth_cubit.dart'
     as _i247;
 import 'package:get_it/get_it.dart' as _i174;
@@ -40,20 +45,25 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final registerModule = _$RegisterModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
-      () => registerModule.getSharedPref,
+      () => registerModule.getShardPref(),
       preResolve: true,
     );
-    gh.singleton<_i361.Dio>(() => registerModule.dio());
-    gh.singleton<_i232.AuthLocalDataSource>(
-        () => _i612.AuthSharedPrefLocalDataSource());
+    gh.singleton<_i361.Dio>(() => registerModule.dio);
     gh.singleton<_i962.AuthRemoteDataSource>(
         () => _i395.AuthApiRemoteDataSource(gh<_i361.Dio>()));
-    gh.singleton<_i3.AuthRepository>(() => _i3.AuthRepository(
+    gh.singleton<_i232.AuthLocalDataSource>(() =>
+        _i612.AuthSharedPrefLocalDataSource(gh<_i460.SharedPreferences>()));
+    gh.singleton<_i679.AuthRepository>(() => _i984.AuthRepositoryImp(
           authRemoteDataSource: gh<_i962.AuthRemoteDataSource>(),
           authLocalDataSource: gh<_i232.AuthLocalDataSource>(),
         ));
-    gh.singleton<_i247.AuthCubit>(
-        () => _i247.AuthCubit(gh<_i3.AuthRepository>()));
+    gh.factory<_i345.Login>(() => _i345.Login(gh<_i679.AuthRepository>()));
+    gh.factory<_i104.Register>(
+        () => _i104.Register(gh<_i679.AuthRepository>()));
+    gh.singleton<_i247.AuthCubit>(() => _i247.AuthCubit(
+          gh<_i104.Register>(),
+          gh<_i345.Login>(),
+        ));
     return this;
   }
 }

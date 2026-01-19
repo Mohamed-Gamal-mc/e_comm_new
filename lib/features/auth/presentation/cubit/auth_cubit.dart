@@ -1,24 +1,20 @@
-import 'package:e_comm_new/core/di/service_locator.dart';
-import 'package:e_comm_new/core/error/failure.dart';
-import 'package:e_comm_new/features/auth/data/data_sources/local/auth_local_data_source.dart';
-import 'package:e_comm_new/features/auth/data/data_sources/local/auth_shared_pref_local_data_source.dart';
-import 'package:e_comm_new/features/auth/data/data_sources/remote/auth_api_remote_data_source.dart';
-import 'package:e_comm_new/features/auth/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:e_comm_new/features/auth/data/models/login_request.dart';
 import 'package:e_comm_new/features/auth/data/models/register_request.dart';
-import 'package:e_comm_new/features/auth/data/repositry/auth_repository.dart';
+import 'package:e_comm_new/features/auth/domain/use_cases/login.dart';
+import 'package:e_comm_new/features/auth/domain/use_cases/register.dart';
 import 'package:e_comm_new/features/auth/presentation/cubit/auth_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton
 class AuthCubit extends Cubit<AuthStates> {
-  final AuthRepository authRepository;
-  AuthCubit(this.authRepository) : super(AuthInitial());
+  AuthCubit(this._register, this._login) : super(AuthInitial());
+  final Register _register;
+  final Login _login;
+
   Future<void> register(RegisterRequest registerRequest) async {
     emit(RegisterLoading());
-
-    final result = await authRepository.register(registerRequest);
+    final result = await _register(registerRequest);
     result.fold(
       (failure) => emit(RegisterError(failure.message)),
       (_) => emit(RegisterSuccess()),
@@ -27,8 +23,7 @@ class AuthCubit extends Cubit<AuthStates> {
 
   Future<void> login(LoginRequest loginRequest) async {
     emit(LoginLoading());
-
-    final result = await authRepository.login(loginRequest);
+    final result = await _login(loginRequest);
     result.fold(
       (failure) => emit(LoginError(failure.message)),
       (_) => emit(LoginSuccess()),
