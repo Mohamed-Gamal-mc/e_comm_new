@@ -11,6 +11,7 @@ import 'package:e_comm_new/features/auth/data/models/login_response_model.dart'
     hide User;
 import 'package:e_comm_new/features/auth/data/models/register_request.dart';
 import 'package:e_comm_new/features/auth/data/models/register_response_model.dart';
+import 'package:e_comm_new/features/auth/data/models/user_model.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton
@@ -20,18 +21,18 @@ class AuthRepository {
   const AuthRepository(
       {required this.authRemoteDataSource, required this.authLocalDataSource});
 
-  Future<Either<Failure, User?>> register(
+  Future<Either<Failure, UserModel>> register(
       RegisterRequest registerRequest) async {
     try {
       final response = await authRemoteDataSource.register(registerRequest);
-      await authLocalDataSource.saveToken(response.token!);
+      await authLocalDataSource.saveToken(response.token);
       return Right(response.user);
     } on AddExceptions catch (exception) {
       return Left(Failure(message: exception.errorMessage));
     }
   }
 
-  Future<Either<Failure, UserLogin?>> login(LoginRequest loginRequest) async {
+  Future<Either<Failure, UserModel>> login(LoginRequest loginRequest) async {
     try {
       final response = await authRemoteDataSource.login(loginRequest);
       await authLocalDataSource.saveToken(response.token!);

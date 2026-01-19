@@ -290,6 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               authCubit.register(RegisterRequest(
                                 email: _emailController!.text,
                                 password: _passwordController!.text,
+                                rePassword: _passwordController!.text,
                                 phone: _phoneController!.text,
                                 name: _nameController!.text,
                               ));

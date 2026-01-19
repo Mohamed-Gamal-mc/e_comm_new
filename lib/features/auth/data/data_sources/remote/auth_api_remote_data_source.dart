@@ -45,6 +45,5 @@ class AuthApiRemoteDataSource extends AuthRemoteDataSource {
       }
       throw RemoteException(message ?? 'Failed to login');
     }
-    ;
   }
 }

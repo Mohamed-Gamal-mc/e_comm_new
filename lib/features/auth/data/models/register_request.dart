@@ -1,28 +1,21 @@
 class RegisterRequest {
-  String? name;
-  String? email;
-  String? password;
-  String? rePassword;
-  String? phone;
+  final String name;
+  final String email;
+  final String password;
+  final String rePassword;
+  final String phone;
+  const RegisterRequest(
+      {required this.name,
+      required this.email,
+      required this.password,
+      required this.rePassword,
+      required this.phone});
 
-  RegisterRequest(
-      {this.name, this.email, this.password, this.rePassword, this.phone});
-
-  RegisterRequest.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    email = json['email'];
-    password = json['password'];
-    rePassword = json['rePassword'];
-    phone = json['phone'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = name;
-    data['email'] = email;
-    data['password'] = password;
-    data['rePassword'] = password;
-    data['phone'] = phone;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'email': email,
+        'password': password,
+        'rePassword': password,
+        'phone': phone,
+      };
 }
